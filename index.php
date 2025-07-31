@@ -1,3 +1,10 @@
+<?php
+session_start();
+header("Cache-Control: no-store, no-cache, must-revalidate");
+header("Pragma: no-cache");
+header("Expires: 0");
+?>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -20,7 +27,7 @@
 <?php
 if (isset($_GET['error'])) {
   if ($_GET['error'] === 'locked' && isset($_GET['expires'])) {
-    $expiresAt = intval($_GET['expires']) * 1000; // Convert to milliseconds for JS
+    $expiresAt = intval($_GET['expires']) * 1000;
 
     echo "
       <p class='error' id='lockout-msg'>
@@ -57,7 +64,5 @@ if (isset($_GET['error'])) {
   }
 }
 ?>
-
-
 </body>
 </html>
