@@ -14,6 +14,10 @@ composer.lock
 cache/
 tmp/
 
+#json db
+
+login_attempts.json
+
 # Ignore IDE/editor settings
 .vscode/
 .idea/
