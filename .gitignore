@@ -22,6 +22,9 @@ login_attempts.json
 .vscode/
 .idea/
 
+#json db 
+login_attempts.json
+
 # OS-specific
 .DS_Store
 Thumbs.db
