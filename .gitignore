@@ -1,0 +1,33 @@
+# Ignore vendor folder (Composer packages)
+vendor/
+
+# Ignore Composer lock file (optional, depends on workflow)
+composer.lock
+
+# Ignore environment config
+.env
+
+# Ignore log files
+*.log
+
+# Ignore cache/temp files
+cache/
+tmp/
+
+# Ignore IDE/editor settings
+.vscode/
+.idea/
+
+# OS-specific
+.DS_Store
+Thumbs.db
+
+# Ignore PHPUnit test output
+phpunit.xml
+phpunit.result.cache
+
+# Ignore build artifacts
+*.phar
+
+# Ignore node stuff if mixing with frontend
+node_modules/
