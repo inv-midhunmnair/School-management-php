@@ -11,25 +11,20 @@ $attempts = file_exists($attemptsFile) ? json_decode(file_get_contents($attempts
 
 $ip = $_SERVER['REMOTE_ADDR'];
 $now = time();
-$lockoutDuration = 10; // 2 minutes in seconds
+$lockoutDuration = 10;
 
 if (!isset($attempts[$ip])) {
   $attempts[$ip] = ['count' => 0, 'last_time' => 0];
 }
 
-// Lockout check
+// Check existing lockout
 $failData = $attempts[$ip];
 $timePassed = $now - $failData['last_time'];
 
-if ($failData['count'] >= 3) {
-  if ($timePassed < $lockoutDuration) {
-    $lockoutExpiresAt = $failData['last_time'] + $lockoutDuration;
-    header("Location: index.php?error=locked&expires={$lockoutExpiresAt}");
-    exit;
-  } else {
-    // Lockout expired, reset attempt count
-    $attempts[$ip] = ['count' => 0, 'last_time' => 0];
-  }
+if ($failData['count'] >= 3 && $timePassed < $lockoutDuration) {
+  $lockoutExpiresAt = $failData['last_time'] + $lockoutDuration;
+  header("Location: index.php?error=locked&expires={$lockoutExpiresAt}");
+  exit;
 }
 
 if ($username === $stored_username && $password === $stored_password) {
@@ -39,22 +34,19 @@ if ($username === $stored_username && $password === $stored_password) {
   header("Location: dashboard.php");
   exit;
 } else {
+  // ❗Increment first
   $attempts[$ip]['count'] += 1;
   $attempts[$ip]['last_time'] = $now;
 
-  // Lock immediately on 3rd failed attempt
-  if ($failData['count'] >= 3) {
-  if ($timePassed < $lockoutDuration) {
-    $lockoutExpiresAt = $failData['last_time'] + $lockoutDuration;
+  // ✅ Check lockout again after increment
+  if ($attempts[$ip]['count'] >= 3) {
+    $lockoutExpiresAt = $attempts[$ip]['last_time'] + $lockoutDuration;
+    file_put_contents($attemptsFile, json_encode($attempts));
     header("Location: index.php?error=locked&expires={$lockoutExpiresAt}");
     exit;
-  } else {
-    // ✅ Reset after lockout ends
-    $attempts[$ip] = ['count' => 0, 'last_time' => 0];
-    file_put_contents($attemptsFile, json_encode($attempts)); // 🛠️ Save reset
   }
-}
 
+  // Not locked yet, just show error
   file_put_contents($attemptsFile, json_encode($attempts));
   header("Location: index.php?error=Invalid credentials.");
   exit;
