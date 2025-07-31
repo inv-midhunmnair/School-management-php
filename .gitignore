@@ -12,6 +12,7 @@ composer.lock
 
 #including the json db
 login_attempts.json
+students.json
 # Ignore cache/temp files
 cache/
 tmp/

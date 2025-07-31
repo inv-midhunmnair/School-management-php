@@ -69,8 +69,18 @@ button:hover {
   padding: 20px 16px;
   display: flex;
   flex-direction: column;
+  height: 150vh;
   gap: 20px;
   box-shadow: 2px 0 8px rgba(0, 0, 0, 0.1);
+}
+
+.sub.heading {
+  text-align: center;
+  display: block;
+  margin: 20px auto;
+  margin-top: 1px;
+  margin-right: 13px;
+  color: #1976d2;
 }
 
 .sidebar h2 {
