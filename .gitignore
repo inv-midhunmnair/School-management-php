@@ -10,6 +10,8 @@ composer.lock
 # Ignore log files
 *.log
 
+#including the json db
+login_attempts.json
 # Ignore cache/temp files
 cache/
 tmp/
