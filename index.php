@@ -28,37 +28,45 @@ header("Expires: 0");
 if (isset($_GET['error'])) {
   if ($_GET['error'] === 'locked' && isset($_GET['expires'])) {
     $expiresAt = intval($_GET['expires']) * 1000;
+    echo "<p class='error' id='lockout-msg'>
+            Too many attempts. Try again in <span id='countdown'></span>
+          </p>";
+    ?>
+    <script>
+      const countdownEl = document.getElementById('countdown');
+      const expiresAt = <?php echo $expiresAt; ?>;
 
-    echo "
-      <p class='error' id='lockout-msg'>
-        Too many attempts. Try again in <span id='countdown'></span>
-      </p>
-      <script>
-        const countdownEl = document.getElementById('countdown');
-        const expiresAt = $expiresAt;
+      function updateCountdown() {
+        const now = Date.now();
+        let remainingMs = expiresAt - now;
 
-        function updateCountdown() {
-          const now = Date.now();
-          let remainingMs = expiresAt - now;
+        if (remainingMs <= 0) {
+          countdownEl.textContent = '00:00';
 
-          if (remainingMs <= 0) {
-            countdownEl.textContent = '00:00';
-            return;
-          }
+          // Reload page without query parameters
+          setTimeout(() => {
+            const url = new URL(window.location.href);
+            url.searchParams.delete('error');
+            url.searchParams.delete('expires');
+            window.location.href = url.pathname;
+          });
 
-          const totalSeconds = Math.floor(remainingMs / 1000);
-          const minutes = Math.floor(totalSeconds / 60);
-          const seconds = totalSeconds % 60;
-
-          countdownEl.textContent =
-            String(minutes).padStart(2, '0') + ':' + String(seconds).padStart(2, '0');
-
-          setTimeout(updateCountdown, 1000);
+          return;
         }
 
-        updateCountdown();
-      </script>
-    ";
+        const totalSeconds = Math.floor(remainingMs / 1000);
+        const minutes = Math.floor(totalSeconds / 60);
+        const seconds = totalSeconds % 60;
+
+        countdownEl.textContent =
+          String(minutes).padStart(2, '0') + ':' + String(seconds).padStart(2, '0');
+
+        setTimeout(updateCountdown);
+      }
+
+      updateCountdown();
+    </script>
+    <?php
   } else {
     echo "<p class='error'>" . htmlspecialchars($_GET['error']) . "</p>";
   }

@@ -11,7 +11,7 @@ $attempts = file_exists($attemptsFile) ? json_decode(file_get_contents($attempts
 
 $ip = $_SERVER['REMOTE_ADDR'];
 $now = time();
-$lockoutDuration = 10;
+$lockoutDuration = 300;
 
 if (!isset($attempts[$ip])) {
   $attempts[$ip] = ['count' => 0, 'last_time' => 0];

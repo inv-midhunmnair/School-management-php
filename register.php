@@ -20,7 +20,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   if ($age < 18 || $age > 25) $errors[] = "Age must be between 18 and 25.";
   if (!filter_var($email, FILTER_VALIDATE_EMAIL)) $errors[] = "Invalid email address.";
   if (!preg_match("/^\d{10}$/", $phone)) $errors[] = "Phone number must be 10 digits.";
-  if (!in_array($course, ['BCA', 'BSc', 'MCA'])) $errors[] = "Please select a valid course.";
+  if (!in_array($course, ['BCA', 'BSc', 'MCA','Btech'])) $errors[] = "Please select a valid course.";
 
   if (empty($errors)) {
     $dataFile = 'data/students.json';
